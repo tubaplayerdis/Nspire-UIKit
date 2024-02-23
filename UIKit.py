@@ -17,6 +17,50 @@ def getStringWidth(text):
 
 def getStringHeight(text):
   return 10
+  
+def get_Color(color):
+  if color == "red":
+    return Color(178,31,53)
+  elif color == "redorange":
+    return Color(216,39,53)
+  elif color == "orange":
+    return Color(255,116,53)
+  elif color == "orangeyellow":
+    return Color(255,161,53)
+  elif color == "yellow":
+    return Color(255,240,53)
+  elif color == "darkgreen":
+    return Color(0,117,58)
+  elif color == "green":
+    return Color(0,158,71)
+  elif color == "lightgreen":
+    return Color(22,221,53)
+  elif color == "darkblue":
+    return Color(0,82,165)
+  elif color == "blue":
+    return Color(0,121,252)
+  elif color == "lightblue":
+    return Color(0,169,252)
+  elif color == "cyan":
+    return Color(0,255,255)
+  elif color == "violet":
+    return Color(104,30,126)
+  elif color == "purple":
+    return Color(125,60,181)
+  elif color == "lightpurple":
+    return Color(189,122,246)
+  elif color == "underwearcrust":
+    return Color(169,104,64)
+  elif color == "brown":
+    return Color(183,97,39)
+  elif color == "lightbrown":
+    return Color(210,138,90)
+  elif color == "darkbrown":
+    return Color(95,44,10)
+  elif color == "black":
+    return Color(0,0,0)
+  elif color == "white":
+    return Color(255,255,255)
 
 class Color:
   def __init__(self, R, G, B):
@@ -24,7 +68,12 @@ class Color:
     self.G = G
     self.B = B
   
-  def set(self, R, G, B):
+  def set(self, color):
+    nc = getColor(color)
+    self.R = nc.R
+    self.G = nc.G
+    self.B = nc.B
+  def mset(self, R, G, B):
     self.R = R
     self.G = G
     self.B = B
@@ -119,7 +168,6 @@ class Button(UIElement):
           self.callback = self.onClick(self.arg)
         else:
           self.callback = self.onClick()
-      #not needed
       #self.ccolor.gset()
       #fill_rect(self.x,self.y,self.width,self.height)
       self.bdcolor.gset()
@@ -133,15 +181,6 @@ class Button(UIElement):
 class Textbox(UIElement):
   CL = -1
   edit = False
-  def __init__(self, x, y, width, height, text, isreadonly):
-    self.x = x
-    self.y = y
-    self.width = width
-    self.height = height
-    self.text = text
-    self.readonly = isreadonly
-    self.DCL = True
-
   def __init__(self, x, y, width, height, text, isreadonly, DCL):
     self.x = x
     self.y = y
@@ -150,6 +189,10 @@ class Textbox(UIElement):
     self.text = text
     self.readonly = isreadonly
     self.DCL = DCL
+    self.bdcolor = Color(0,0,0)
+    self.txcolor = Color(0,0,0)
+    self.ndcolor = Color(160,160,160)
+    self.edcolor = Color(210,210,210)
 
   def setText(self, text):
     if self.DCL == True:
@@ -184,7 +227,7 @@ class Textbox(UIElement):
     if get_key() == "enter":
       self.edit = True
     if self.readonly == False and self.isCursor() and self.edit == True:
-      set_color(210,210,210)
+      self.edcolor.gset()
       fill_rect(self.x,self.y,self.width,self.height)
       key=str(get_key(1))
       if key == "del":
@@ -194,8 +237,10 @@ class Textbox(UIElement):
       elif key != "esc":
         self.setText(self.text+key)
     else:
-      set_color(160,160,160)
+      self.ndcolor.gset()
       fill_rect(self.x,self.y,self.width,self.height)
-    set_color(0,0,0)
+    self.bdcolor.gset()
     draw_rect(self.x,self.y,self.width,self.height)
+    self.txcolor.gset()
     draw_text(self.x+3,self.y+self.height/10,self.text)
+    set_color(0,0,0)
