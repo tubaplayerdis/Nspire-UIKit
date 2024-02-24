@@ -250,3 +250,40 @@ class Textbox(UIElement):
     self.txcolor.gset()
     draw_text(self.x+3,self.y+self.height/10,self.text)
     set_color(0,0,0)
+    
+
+class Panel(UIElement):
+  def __init__(self, x, y, width, height, text, collapsable):
+    self.x=x
+    self.y=y
+    self.width = width
+    self.height = height
+    self.text = text
+    self.collapsable = collapsable
+    self.items = []
+    self.collapsed = False
+    
+  def addElement(self,element):
+    self.items.append(element)
+  
+  def removeElement(self,index):
+    self.items.pop(index)
+  
+  def removeAll(self):
+    self.items.clear()
+    
+  def render(self):
+    if self.isClick():
+      self.collapsed = not self.collapsed
+    draw_rect(self.x,self.y,self.width,self.height)
+    fill_circle(self.x+10,self.y+(self.height/2),5)
+    draw_text(self.x+20,self.y+(self.height/5),self.text)
+    if self.collapsed == False:
+      space = 0
+      enumeration = 0
+      if len(self.items) != 0:
+        for item in self.items:
+          item.x = self.x+5
+          item.y = self.y-((self.height/2)+self.items[enumeration-1].height)
+          item.render()
+          enumeration=enumeration+1
