@@ -18,7 +18,7 @@ def getStringWidth(text):
 def getStringHeight(text):
   return 10
   
-def get_Color(color):
+def getColor(color):
   if color == "red":
     return Color(178,31,53)
   elif color == "redorange":
@@ -232,10 +232,16 @@ class Textbox(UIElement):
       key=str(get_key(1))
       if key == "del":
         self.setText(self.text[:len(self.text)-1])
-      elif key == "esc":
-        self.edit = False
-      elif key != "esc":
-        self.setText(self.text+key)
+      if get_platform() == "hh":
+        if key == "esc":
+          self.edit = False
+        elif key != "esc":
+          self.setText(self.text+key)
+      else:
+        if key == "up":
+          self.edit = False
+        elif key != "del":
+          self.setText(self.text+key)
     else:
       self.ndcolor.gset()
       fill_rect(self.x,self.y,self.width,self.height)
