@@ -118,7 +118,7 @@ class Label(UIElement):
     self.x=x
     self.y=y
     self.font = set_pen("thin","solid")
-    self.height = getStringHeight(text)
+    self.height = 20
     self.width = getStringWidth(text)
     self.color = Color(0,0,0)
   def setText(self, nt):
@@ -262,7 +262,11 @@ class Panel(UIElement):
     self.collapsable = collapsable
     self.items = []
     self.collapsed = False
-    
+    self.buffer = 5
+    self.txcolor = Color(0,0,0)
+    self.bdcolor = Color(0,0,0)
+    self.bgcolor = Color(160,160,160)
+    self.btcolor = Color(0,0,0)
   def addElement(self,element):
     self.items.append(element)
   
@@ -275,8 +279,13 @@ class Panel(UIElement):
   def render(self):
     if self.isClick():
       self.collapsed = not self.collapsed
+    self.bgcolor.gset()
+    fill_rect(self.x,self.y,self.width,self.height)
+    self.bdcolor.gset()
     draw_rect(self.x,self.y,self.width,self.height)
+    self.btcolor.gset()
     fill_circle(self.x+10,self.y+(self.height/2),5)
+    self.txcolor.gset()
     draw_text(self.x+20,self.y+(self.height/5),self.text)
     if self.collapsed == False:
       space = 0
@@ -284,6 +293,15 @@ class Panel(UIElement):
       if len(self.items) != 0:
         for item in self.items:
           item.x = self.x+5
-          item.y = self.y-((self.height/2)+self.items[enumeration-1].height)
-          item.render()
+          addto = 0
+          for i in range(0,enumeration):
+            addto += self.items[i].height
+            addto += self.buffer
+          space += (item.height+self.buffer)
+          item.y = self.y-(self.height/2+addto+self.buffer)
           enumeration=enumeration+1
+        self.bgcolor.gset()
+        fill_rect(self.x+1,self.y-space,self.width-1,space+1)
+        set_color(0,0,0)
+        for item in self.items:
+          item.render()
