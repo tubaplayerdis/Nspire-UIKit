@@ -10,11 +10,11 @@ This will constantly be updated
 
 # Current Planned Features before update:
 
-Coloring System - Completed but not documented
+Coloring System - Completed
 
 Toggle button - Not started
 
-Dropdown select - Not started
+Dropdown select - Completed but not documented
 
 Basic Graphing - Not Started
 
