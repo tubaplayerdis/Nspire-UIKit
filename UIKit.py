@@ -252,7 +252,7 @@ class Textbox(UIElement):
     set_color(0,0,0)
     
 
-class Panel(UIElement):
+class Dropdown(UIElement):
   def __init__(self, x, y, width, height, text, collapsable):
     self.x=x
     self.y=y
