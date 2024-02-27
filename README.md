@@ -5,7 +5,7 @@ Very basic and buggy, READ Documentation
 Going to release a V1 soon with more detailed documentation
 
 Documentation:
-https://sites.google.com/view/uikit-documentation/home?authuser=2
+https://sites.google.com/view/uikit-documentation/home
 This will constantly be updated
 
 # Current Planned Features before update:
