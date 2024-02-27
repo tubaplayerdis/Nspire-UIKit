@@ -18,6 +18,10 @@ def getStringWidth(text):
 def getStringHeight(text):
   return 10
   
+def draw_arrow(x1,y1,x2,y2,vx,vy):
+  draw_line(x1,y1,vx,vy)
+  draw_line(x2,y2,vx,vy)
+  
 def getColor(color):
   if color == "red":
     return Color(178,31,53)
@@ -285,11 +289,12 @@ class Dropdown(UIElement):
     fill_rect(self.x,self.y,self.width,self.height)
     self.bdcolor.gset()
     draw_rect(self.x,self.y,self.width,self.height)
-    self.btcolor.gset()
-    fill_circle(self.x+10,self.y+(self.height/2),5)
+    #fill_circle(self.x+10,self.y+(self.height/2),5)
     self.txcolor.gset()
     draw_text(self.x+20,self.y+(self.height/5),self.text)
     if self.collapsed == False:
+      self.btcolor.gset()
+      draw_arrow(self.x+5,self.y+(self.height/1.5),self.x+15,self.y+(self.height/1.5),self.x+10,self.y+(self.height/3))
       space = 0
       enumeration = 0
       if len(self.items) != 0:
@@ -307,3 +312,7 @@ class Dropdown(UIElement):
         set_color(0,0,0)
         for item in self.items:
           item.render()
+    else:
+      self.btcolor.gset()
+      draw_arrow(self.x+5,self.y+(self.height/3),self.x+15,self.y+(self.height/3),self.x+10,self.y+(self.height/1.5))
+      set_color(0,0,0)
