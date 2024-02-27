@@ -65,6 +65,14 @@ def getColor(color):
     return Color(0,0,0)
   elif color == "white":
     return Color(255,255,255)
+  elif color == "gold":
+    return Color(160,160,60)
+  elif color == "gray":
+    return Color(160,160,160)
+  elif color == "lightgray":
+    return Color(211,211,211)
+  elif color == "darkgray":
+    return Color(105,105,105)
 
 class Color:
   def __init__(self, R, G, B):
@@ -267,7 +275,7 @@ class Dropdown(UIElement):
     self.text = text
     self.collapsable = collapsable
     self.items = []
-    self.collapsed = False
+    self.collapsed = True
     self.buffer = 5
     self.txcolor = Color(0,0,0)
     self.bdcolor = Color(0,0,0)
@@ -300,7 +308,7 @@ class Dropdown(UIElement):
       if len(self.items) != 0:
         for item in self.items:
           item.x = self.x+5
-          addto = 0
+          addto = 5
           for i in range(0,enumeration):
             addto += self.items[i].height
             addto += self.buffer
