@@ -109,8 +109,10 @@ class UIElement:
           return False
       
   def isClick(self):
-    if (self.isCursor() == True and get_key() == "enter"):
-      return True
+    if get_key() == "enter":
+      if self.isCursor() == True:
+        return True
+    return False
 
 class Label(UIElement):
   def __init__(self, x, y, text):
@@ -235,7 +237,7 @@ class Textbox(UIElement):
       if get_platform() == "hh":
         if key == "esc":
           self.edit = False
-        elif key != "esc":
+        elif key != "del":
           self.setText(self.text+key)
       else:
         if key == "up":
