@@ -12,7 +12,7 @@ This will constantly be updated
 
 Coloring System - Completed
 
-Toggle button - Not started
+Toggle button - Completed but not documented
 
 Dropdown select - Completed but not documented
 
