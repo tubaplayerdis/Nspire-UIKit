@@ -1,3 +1,4 @@
+
 from ti_system import *
 from ti_draw import *
 from time import *
@@ -324,3 +325,35 @@ class Dropdown(UIElement):
       self.btcolor.gset()
       draw_arrow(self.x+5,self.y+(self.height/3),self.x+15,self.y+(self.height/3),self.x+10,self.y+(self.height/1.5))
       set_color(0,0,0)
+      
+class TButton(UIElement):
+  def __init__(self, x, y, width, height, text):
+    self.x=x
+    self.y=y
+    self.width = width
+    self.height = height
+    self.text = text
+    self.readonly = False
+    self.toggle = False
+    self.bdcolor = Color(0,0,0)
+    self.crcolor = Color(0,0,0)
+    self.oncolor = Color(160,160,160)
+    self.ofcolor = Color(0,0,0)
+    self.txcolor = Color(0,0,0)
+
+  def render(self):
+    if self.isClick():
+      self.toggle = not self.toggle
+
+    if self.toggle == True:
+      self.oncolor.gset()
+    else:
+      self.ofcolor.gset()
+
+    fill_circle(self.x+self.x/14, self.y+(self.height/2), self.height/3)
+
+    self.bdcolor.gset()
+    draw_rect(self.x,self.y,self.width,self.height)
+    self.txcolor.gset()
+    draw_text(self.x+self.x/6,self.y+self.height/10,self.text)
+    set_color(0,0,0)      
