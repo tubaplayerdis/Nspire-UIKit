@@ -1,4 +1,3 @@
-
 from ti_system import *
 from ti_draw import *
 from time import *
@@ -327,7 +326,7 @@ class Dropdown(UIElement):
       set_color(0,0,0)
       
 class TButton(UIElement):
-  def __init__(self, x, y, width, height, text):
+  def __init__(self, x, y, width, height, text, onClick, arg):
     self.x=x
     self.y=y
     self.width = width
@@ -336,13 +335,20 @@ class TButton(UIElement):
     self.readonly = False
     self.toggle = False
     self.bdcolor = Color(0,0,0)
-    self.crcolor = Color(0,0,0)
     self.oncolor = Color(160,160,160)
     self.ofcolor = Color(0,0,0)
     self.txcolor = Color(0,0,0)
+    self.onClick = onClick
+    self.arg = arg
+    self.callback = "You are trying to access the callback before it has been set; why?"
 
   def render(self):
     if self.isClick():
+      if self.onClick != None:
+        if self.arg != None:
+          self.callback = self.onClick(self.arg)
+        else:
+          self.callback = self.onClick()
       self.toggle = not self.toggle
 
     if self.toggle == True:
