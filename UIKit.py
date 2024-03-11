@@ -184,7 +184,7 @@ class Button(UIElement):
           self.callback = self.onClick()
       #self.ccolor.gset()
       #fill_rect(self.x,self.y,self.width,self.height)
-      self.bdcolor.gset()
+    self.bdcolor.gset()
     
     
     draw_rect(self.x,self.y,self.width,self.height)
@@ -342,6 +342,20 @@ class TButton(UIElement):
     self.arg = arg
     self.callback = "You are trying to access the callback before it has been set; why?"
 
+  def setText(self, text):
+    self.text = text
+
+  def getText(self):
+    return self.text
+
+  def getSize(self):
+    size = self.width, self.height
+    return size
+
+  def setSize(self, width, height):
+    self.width = width
+    self.height = height
+
   def render(self):
     if self.isClick():
       if self.onClick != None:
@@ -362,4 +376,43 @@ class TButton(UIElement):
     draw_rect(self.x,self.y,self.width,self.height)
     self.txcolor.gset()
     draw_text(self.x+self.x/6,self.y+self.height/10,self.text)
-    set_color(0,0,0)      
+    set_color(0,0,0)  
+
+class Panel(UIElement):
+  def __init__(self,x,y,width,height,isRender):
+    self.x = x
+    self.y = y
+    self.width = width
+    self.height = height
+    self.color = Color(55,55,55)
+    self.bdcolor = Color(0,0,0)
+    self.items = []
+    self.hasBorder = False
+    self.isRender = isRender
+  
+  def addElement(self,element):
+    element.x = self.x+element.x
+    element.y = self.y+element.y
+    self.items.append(element)
+  
+  def removeElement(self,index):
+    self.items.pop(index)
+  
+  def removeAll(self):
+    self.items.clear()
+    
+  def toggleRender(self):
+    self.isRender = not self.isRender
+  
+  def setRender(self, state):
+    self.isRender = state
+    
+  def render(self):
+    if self.isRender == True:
+      self.color.gset()
+      fill_rect(self.x,self.y,self.width,self.height)
+      if self.hasBorder == True:
+        self.bdcolor.gset()
+        draw_rect(self.x,self.y,self.width,self.height)
+      for item in self.items:
+        item.render()
