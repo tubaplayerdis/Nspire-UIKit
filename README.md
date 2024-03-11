@@ -9,15 +9,23 @@ https://sites.google.com/view/uikit-documentation/home
 This will constantly be updated
 
 # Features Completed
+
 Color System
+
 Label
+
 Button
+
 Toggle Button
+
 Textbox
+
 Dropdown
+
 Panel
 
 # Current Planned Features before update:
+
 Color Picker - Started
 
 Basic Graphing - Not Started
