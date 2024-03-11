@@ -8,13 +8,17 @@ Documentation:
 https://sites.google.com/view/uikit-documentation/home
 This will constantly be updated
 
+# Features Completed
+Color System
+Label
+Button
+Toggle Button
+Textbox
+Dropdown
+Panel
+
 # Current Planned Features before update:
-
-Coloring System - Completed
-
-Toggle button - Completed but not documented
-
-Dropdown select - Completed but not documented
+Color Picker - Started
 
 Basic Graphing - Not Started
 
