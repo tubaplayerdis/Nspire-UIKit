@@ -26,6 +26,10 @@ Panel
 
 # Current Planned Features before update:
 
+Number mode for textbox - not started
+
+slider - not started
+
 Color Picker - Started
 
 Basic Graphing - Not Started
