@@ -16,7 +16,7 @@ def getStringWidth(text):
   return len
 
 def getStringHeight(text):
-  return 10
+  return 8
   
 def draw_arrow(x1,y1,x2,y2,vx,vy):
   draw_line(x1,y1,vx,vy)
@@ -160,6 +160,7 @@ class Button(UIElement):
     self.callback = "You are trying to access the callback before it has been set; why?"
     self.bdcolor = Color(0,0,0)
     self.txcolor = Color(0,0,0)
+    self.bgcolor = Color(140,140,140)
 
   def setText(self, text):
     self.text = text
@@ -184,9 +185,9 @@ class Button(UIElement):
           self.callback = self.onClick()
       #self.ccolor.gset()
       #fill_rect(self.x,self.y,self.width,self.height)
+    self.bgcolor.gset()
+    fill_rect(self.x,self.y,self.width,self.height)
     self.bdcolor.gset()
-    
-    
     draw_rect(self.x,self.y,self.width,self.height)
     self.txcolor.gset()
     draw_text(self.x+3,self.y+self.height/10,self.text)
@@ -338,6 +339,7 @@ class TButton(UIElement):
     self.oncolor = Color(160,160,160)
     self.ofcolor = Color(0,0,0)
     self.txcolor = Color(0,0,0)
+    self.bgcolor = Color(140,140,140)
     self.onClick = onClick
     self.arg = arg
     self.callback = "You are trying to access the callback before it has been set; why?"
@@ -364,18 +366,20 @@ class TButton(UIElement):
         else:
           self.callback = self.onClick()
       self.toggle = not self.toggle
+    
+    self.bgcolor.gset()
+    fill_rect(self.x,self.y,self.width,self.height)
 
     if self.toggle == True:
       self.oncolor.gset()
     else:
       self.ofcolor.gset()
 
-    fill_circle(self.x+self.x/14, self.y+(self.height/2), self.height/3)
-
+    fill_circle(self.x+(self.height/2), self.y+(self.height/2), self.height/3)
     self.bdcolor.gset()
     draw_rect(self.x,self.y,self.width,self.height)
     self.txcolor.gset()
-    draw_text(self.x+self.x/6,self.y+self.height/10,self.text)
+    draw_text(self.x+self.height,self.y+(self.height/2)-7,self.text)
     set_color(0,0,0)  
 
 class Panel(UIElement):
