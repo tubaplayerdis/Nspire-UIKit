@@ -1,6 +1,7 @@
 from ti_system import *
 from ti_draw import *
 from time import *
+from random import *
 
 canvas=[]
 defaultpen = set_pen("thin","solid")
@@ -22,6 +23,24 @@ def draw_arrow(x1,y1,x2,y2,vx,vy):
   draw_line(x1,y1,vx,vy)
   draw_line(x2,y2,vx,vy)
   
+def isNumber(key):
+  if key == "1":
+    return True
+  elif key == "3":
+    return True
+  elif key == "4":
+    return True
+  elif key == "5":
+    return True
+  elif key == "6":
+    return True
+  elif key == "7":
+    return True
+  elif key == "8":
+    return True
+  elif key == "9":
+    return True
+
 def getColor(color):
   if color == "red":
     return Color(178,31,53)
@@ -208,6 +227,10 @@ class Textbox(UIElement):
     self.txcolor = Color(0,0,0)
     self.ndcolor = Color(160,160,160)
     self.edcolor = Color(210,210,210)
+    self.numMode = False
+
+  def setNumMode(self, toggle):
+    self.numMode = toggle
 
   def setText(self, text):
     if self.DCL == True:
@@ -251,12 +274,20 @@ class Textbox(UIElement):
         if key == "esc":
           self.edit = False
         elif key != "del":
-          self.setText(self.text+key)
+          if self.numMode:
+            if isNumber(key):
+              self.setText(self.text+key)
+          else:
+            self.setText(self.text+key)
       else:
         if key == "up":
           self.edit = False
         elif key != "del":
-          self.setText(self.text+key)
+          if self.numMode:
+            if isNumber(key):
+              self.setText(self.text+key)
+          else:
+            self.setText(self.text+key)
     else:
       self.ndcolor.gset()
       fill_rect(self.x,self.y,self.width,self.height)
@@ -418,5 +449,81 @@ class Panel(UIElement):
       if self.hasBorder == True:
         self.bdcolor.gset()
         draw_rect(self.x,self.y,self.width,self.height)
+      for item in self.items:
+        item.render()
+
+class Slider(UIElement):
+  def __init__(self,x,y,width,height):
+    self.x = x
+    self.y = y
+    self.width = width
+    sellf.height = height
+
+class Colorpicker(UIElement):
+  def __init__(self,x,y,color,func,arg):
+    self.x = x
+    self.y = y
+    self.width = 120
+    self.height = 105
+    self.crcolor = color
+    self.items = []
+    self.bgcolor = Color(105,105,105)
+    self.bdcolor = Color(255,255,255)
+    self.isopen = False
+    self.func = func
+    self.arg = arg
+    #the items
+    self.ranbt = Button(5,5,50,20,"random",self.rancol,None)
+    self.setbt = Button(65,5,50,20,"select",self.selcol,None)
+    self.rbox = Textbox(65,80,50,20,str(color.R),False,False)
+    self.gbox = Textbox(65,55,50,20,str(color.G),False,False)
+    self.bbox = Textbox(65,30,50,20,str(color.B),False,False)
+    self.rlab = Label(58,85,"r")
+    self.glab = Label(58,60,"g")
+    self.blab = Label(58,35,"b")
+    self.items.append(self.ranbt)
+    self.items.append(self.setbt)
+    self.items.append(self.rbox)
+    self.items.append(self.gbox)
+    self.items.append(self.bbox)
+    self.items.append(self.rlab)
+    self.items.append(self.glab)
+    self.items.append(self.blab)
+    self.items[2].setNumMode(True)
+    self.items[3].setNumMode(True)
+    self.items[4].setNumMode(True)
+    for item in self.items:
+      item.x = self.x + item.x
+      item.y = self.y + item.y
+  def rancol(self):
+    self.rbox.setText(str(randint(0,255)))
+    self.gbox.setText(str(randint(0,255)))
+    self.bbox.setText(str(randint(0,255)))
+  
+  def selcol(self):
+    if self.func != None:
+      if self.arg != None:
+        self.func(self.arg)
+      else:
+        self.func()
+    self.isopen = False
+  def upcol(self):
+    r=0
+    g=0
+    b=0
+    if self.rbox.text != "":
+      r = int(self.rbox.getText())
+    if self.gbox.text != "":
+      g = int(self.gbox.getText())
+    if self.bbox.text != "":
+      b = int(self.bbox.getText())
+    self.crcolor.mset(r,g,b)
+  def render(self):
+    if self.isopen == True:
+      self.bgcolor.gset()
+      fill_rect(self.x,self.y,self.width,self.height)
+      self.upcol()
+      self.crcolor.gset()
+      fill_rect(self.x+5,self.y+30,45,70)
       for item in self.items:
         item.render()
