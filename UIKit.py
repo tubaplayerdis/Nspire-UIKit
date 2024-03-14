@@ -518,6 +518,10 @@ class Colorpicker(UIElement):
     if self.bbox.text != "":
       b = int(self.bbox.getText())
     self.crcolor.mset(r,g,b)
+  
+  def getColor(self):
+    return self.crcolor
+  
   def render(self):
     if self.isopen == True:
       self.bgcolor.gset()
