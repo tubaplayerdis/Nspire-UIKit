@@ -1,8 +1,8 @@
 # Nspire-UIKit
 GUI framework written in python for TINspire calculators
-Very basic and buggy, READ Documentation
+Somewhat fleshed out, READ Documentation
 
-Going to release a V1 soon with more detailed documentation
+Full release coming soon, check beta releases via documentation downloads page
 
 Documentation:
 https://sites.google.com/view/uikit-documentation/home
@@ -24,16 +24,22 @@ Dropdown
 
 Panel
 
+Textbox Number Mode
+
+Color Picker
+
 # Current Planned Features before update:
 
-Number mode for textbox - Completed but not documented
-
 slider - started
-
-Color Picker - Completed but not documented
 
 Basic Graphing - Not Started
 
 Math Box/Chem Box - Not started
+
+# Thinking about
+
+Sliders for Colorpicker
+
+Colorpicker as a function that return a color
 
 
