@@ -24,7 +24,11 @@ def draw_arrow(x1,y1,x2,y2,vx,vy):
   draw_line(x2,y2,vx,vy)
   
 def isNumber(key):
-  if key == "1":
+  if key == "0":
+    return True
+  elif key == "1":
+    return True
+  elif key == "2":
     return True
   elif key == "3":
     return True
