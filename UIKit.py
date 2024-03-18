@@ -217,8 +217,6 @@ class Button(UIElement):
     set_color(0,0,0)
 
 class Textbox(UIElement):
-  CL = -1
-  edit = False
   def __init__(self, x, y, width, height, text, isreadonly, DCL):
     self.x = x
     self.y = y
@@ -232,6 +230,8 @@ class Textbox(UIElement):
     self.ndcolor = Color(160,160,160)
     self.edcolor = Color(210,210,210)
     self.numMode = False
+    self.CL = -1
+    self.edit = False
 
   def setNumMode(self, toggle):
     self.numMode = toggle
@@ -246,7 +246,7 @@ class Textbox(UIElement):
           break
     elif self.CL != -1:
       while True:
-        if len(text) > self.Cl:
+        if len(text) > self.CL:
           text = text[:len(text)-1]
         else:
           self.text = text
@@ -480,8 +480,11 @@ class Colorpicker(UIElement):
     self.ranbt = Button(5,5,50,20,"random",self.rancol,None)
     self.setbt = Button(65,5,50,20,"select",self.selcol,None)
     self.rbox = Textbox(65,80,50,20,str(color.R),False,False)
+    self.rbox.CL = 3
     self.gbox = Textbox(65,55,50,20,str(color.G),False,False)
+    self.gbox.CL = 3
     self.bbox = Textbox(65,30,50,20,str(color.B),False,False)
+    self.bbox.CL = 3
     self.rlab = Label(58,85,"r")
     self.glab = Label(58,60,"g")
     self.blab = Label(58,35,"b")
@@ -521,6 +524,12 @@ class Colorpicker(UIElement):
       g = int(self.gbox.getText())
     if self.bbox.text != "":
       b = int(self.bbox.getText())
+    if r>255:
+      r=255
+    if g>255:
+      g=255
+    if b>255:
+      b=255
     self.crcolor.mset(r,g,b)
   
   def getColor(self):
