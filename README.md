@@ -28,9 +28,9 @@ Textbox Number Mode
 
 Color Picker
 
-# Current Planned Features before update:
+Slider - not documented
 
-slider - started
+# Current Planned Features before update:
 
 Basic Graphing - Not Started
 
