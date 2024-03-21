@@ -13,7 +13,7 @@ def init():
 def getStringWidth(text):
   len=0
   for i in text:
-    len+=7
+    len+=8
   return len
 
 def getStringHeight(text):
@@ -457,11 +457,68 @@ class Panel(UIElement):
         item.render()
 
 class Slider(UIElement):
-  def __init__(self,x,y,width,height):
+  def __init__(self,x,y,width,height,min,max,value,isInt):
     self.x = x
     self.y = y
     self.width = width
-    sellf.height = height
+    self.height = height
+    self.rangemax = max
+    self.rangemin = min
+    self.value = value
+    self.isChange = False
+    self.isInt = isInt
+    self.bgcolor = Color(160,160,160)
+    self.bdcolor = Color(0,0,0)
+    self.slcolor = Color(105,105,105)
+    self.selcolor = Color(0,0,0)
+    self.lncolor = Color(0,0,0)
+    self.maxtxcolor = Color(0,0,0)
+    self.mintxcolor = Color(0,0,0)
+    self.valbxcolor = Color(150,150,150)
+    self.valtxcolor = Color(0,0,0)
+    self.prvalue = self.x+(self.width/2)
+  
+  def evalValue(self):
+    medval = (self.prvalue-self.x-5)/(self.width-10)
+    frange = abs(self.rangemax)+abs(self.rangemin)
+    if self.isInt:
+      self.value = round((medval*frange)-abs(self.rangemin),0)
+    else:
+      self.value = round((medval*frange)-abs(self.rangemin),2)
+    
+  
+  def render(self):
+    if self.isClick():
+      self.isChange = not self.isChange
+    
+    if self.isChange:
+      tempval = get_mouse()
+      self.prvalue = tempval[0]
+      if self.prvalue < self.x+5:
+        self.prvalue = self.x+5
+      if self.prvalue > self.x+self.width-5:
+        self.prvalue = self.x+self.width-5
+    self.bgcolor.gset()
+    fill_rect(self.x,self.y,self.width,self.height)
+    self.bdcolor.gset()
+    draw_rect(self.x,self.y,self.width,self.height)
+    self.lncolor.gset()
+    draw_line(self.x+5,self.y+(self.height/1.5),(self.x+self.width)-5,self.y+(self.height/1.5))
+    if self.isChange:
+      self.selcolor.gset()
+    else:
+      self.slcolor.gset()
+    fill_circle(self.prvalue,self.y+(self.height/1.5),5)
+    if self.isChange:
+      self.valbxcolor.gset()
+      fill_rect(self.prvalue-10,self.y+self.height+3,35,15)
+      self.evalValue()
+      self.valtxcolor.gset()
+      draw_text(self.prvalue-8, self.y+self.height+4, str(self.value))
+    self.mintxcolor.gset()
+    draw_text(self.x+2,self.y+(self.height/3)-8,str(self.rangemin))
+    self.maxtxcolor.gset()
+    draw_text(self.x+self.width-getStringWidth(str(self.rangemax)),self.y+(self.height/3)-8,str(self.rangemax))
 
 class Colorpicker(UIElement):
   def __init__(self,x,y,color,func,arg):
