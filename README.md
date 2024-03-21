@@ -32,6 +32,10 @@ Slider - not documented
 
 # Current Planned Features before update:
 
+Event System
+
+Events for Slider
+
 Basic Graphing - Not Started
 
 Math Box/Chem Box - Not started
