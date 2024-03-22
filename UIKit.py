@@ -97,6 +97,33 @@ def getColor(color):
   elif color == "darkgray":
     return Color(105,105,105)
 
+class Listener():
+  def __init__(self, funcref, isargs):
+    self.funcref = funcref
+    self.isargs = isargs
+  def call(self, args):
+    if self.isargs == True:
+      self.funcref(args)
+    else:
+      self.funcref()
+
+class Event():
+  def __init__(self):
+    self.listeners = []
+  
+  def addListener(self, listener):
+    self.listeners.append(listener)
+  
+  def removeListener(self, index):
+    self.listeners.pop(index)
+    
+  def removeAll(self):
+    self.listeners = []
+    
+  def InvokeListeners(self, args):
+    for listen in self.listeners:
+      listen.call(args)
+
 class Color:
   def __init__(self, R, G, B):
     self.R = R
@@ -125,6 +152,8 @@ class UIElement:
   width=10
   height=10
   input=False
+  cursorEvent = Event()
+  clickEvent = Event()
   def isCursor(self):
     pos=get_mouse()
     xc = pos[0]+3
@@ -136,9 +165,11 @@ class UIElement:
       return True
     else:
       if xc < (self.x+self.width) and xc > self.x and yc > self.y and yc < (self.y+self.height):
+        self.cursorEvent.InvokeListeners(None)
         return True
       else:
         if xc < (self.x+self.width) and xc > self.x and yc > self.y and yc < (self.y+self.height):
+          self.cursorEvent.InvokeListeners(None)
           return True
         else:
           return False
@@ -146,6 +177,7 @@ class UIElement:
   def isClick(self):
     if get_key() == "enter":
       if self.isCursor() == True:
+        self.clickEvent.InvokeListeners(None)
         return True
     return False
 
@@ -160,7 +192,6 @@ class Label(UIElement):
     self.color = Color(0,0,0)
   def setText(self, nt):
     self.text = nt
-    self.height = getStringHeight(self.text)
     self.width = getStringWidth(self.text)
     
   def getText(self):
@@ -477,6 +508,7 @@ class Slider(UIElement):
     self.valbxcolor = Color(150,150,150)
     self.valtxcolor = Color(0,0,0)
     self.prvalue = self.x+(self.width/2)
+    self.changeValueEvent = Event()
   
   def evalValue(self):
     medval = (self.prvalue-self.x-5)/(self.width-10)
@@ -515,6 +547,7 @@ class Slider(UIElement):
       self.evalValue()
       self.valtxcolor.gset()
       draw_text(self.prvalue-8, self.y+self.height+4, str(self.value))
+      self.changeValueEvent.InvokeListeners(self.value)
     self.mintxcolor.gset()
     draw_text(self.x+2,self.y+(self.height/3)-8,str(self.rangemin))
     self.maxtxcolor.gset()
