@@ -496,8 +496,8 @@ class Slider(UIElement):
     self.rangemax = max
     self.rangemin = min
     self.value = value
-    self.isChange = False
-    self.isInt = isInt
+    self.ischange = False
+    self.isint = isInt
     self.bgcolor = Color(160,160,160)
     self.bdcolor = Color(0,0,0)
     self.slcolor = Color(105,105,105)
@@ -513,7 +513,7 @@ class Slider(UIElement):
   def evalValue(self):
     medval = (self.prvalue-self.x-5)/(self.width-10)
     frange = abs(self.rangemax)+abs(self.rangemin)
-    if self.isInt:
+    if self.isint:
       self.value = round((medval*frange)-abs(self.rangemin),0)
     else:
       self.value = round((medval*frange)-abs(self.rangemin),2)
@@ -521,9 +521,9 @@ class Slider(UIElement):
   
   def render(self):
     if self.isClick():
-      self.isChange = not self.isChange
+      self.ischange = not self.ischange
     
-    if self.isChange:
+    if self.ischange:
       tempval = get_mouse()
       self.prvalue = tempval[0]
       if self.prvalue < self.x+5:
@@ -536,12 +536,12 @@ class Slider(UIElement):
     draw_rect(self.x,self.y,self.width,self.height)
     self.lncolor.gset()
     draw_line(self.x+5,self.y+(self.height/1.5),(self.x+self.width)-5,self.y+(self.height/1.5))
-    if self.isChange:
+    if self.ischange:
       self.selcolor.gset()
     else:
       self.slcolor.gset()
     fill_circle(self.prvalue,self.y+(self.height/1.5),5)
-    if self.isChange:
+    if self.ischange:
       self.valbxcolor.gset()
       fill_rect(self.prvalue-10,self.y+self.height+3,35,15)
       self.evalValue()
@@ -554,7 +554,7 @@ class Slider(UIElement):
     draw_text(self.x+self.width-getStringWidth(str(self.rangemax)),self.y+(self.height/3)-8,str(self.rangemax))
 
 class Colorpicker(UIElement):
-  def __init__(self,x,y,color,func,arg):
+  def __init__(self,x,y,color):
     self.x = x
     self.y = y
     self.width = 120
@@ -564,8 +564,9 @@ class Colorpicker(UIElement):
     self.bgcolor = Color(105,105,105)
     self.bdcolor = Color(255,255,255)
     self.isopen = False
-    self.func = func
-    self.arg = arg
+    self.onselect = Event()
+    self.onrandom = Event()
+    self.onopen = Event()
     #the items
     self.ranbt = Button(5,5,50,20,"random",self.rancol,None)
     self.setbt = Button(65,5,50,20,"select",self.selcol,None)
@@ -596,14 +597,16 @@ class Colorpicker(UIElement):
     self.rbox.setText(str(randint(0,255)))
     self.gbox.setText(str(randint(0,255)))
     self.bbox.setText(str(randint(0,255)))
+    self.onrandom.InvokeListeners(None)
   
+  def open(self):
+    self.isopen = True
+    self.onopen.InvokeListeners(None)
+
   def selcol(self):
-    if self.func != None:
-      if self.arg != None:
-        self.func(self.arg)
-      else:
-        self.func()
     self.isopen = False
+    self.onselect.InvokeListeners(None)
+
   def upcol(self):
     r=0
     g=0
@@ -634,3 +637,4 @@ class Colorpicker(UIElement):
       fill_rect(self.x+5,self.y+30,45,70)
       for item in self.items:
         item.render()
+
