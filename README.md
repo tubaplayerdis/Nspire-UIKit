@@ -8,6 +8,10 @@ Documentation:
 https://sites.google.com/view/uikit-documentation/home
 This will constantly be updated
 
+# Update Process
+
+Repo code update -> Documentation Update -> Update Betas and Dev versions on Drive
+
 # Features Completed
 
 Color System
@@ -30,7 +34,7 @@ Color Picker
 
 Slider - not documented
 
-# Current Planned Features before update:
+# Current Planned Features before release:
 
 Event System
 
