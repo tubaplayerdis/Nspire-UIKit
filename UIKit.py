@@ -508,7 +508,7 @@ class Slider(UIElement):
     self.valbxcolor = Color(150,150,150)
     self.valtxcolor = Color(0,0,0)
     self.prvalue = self.x+(self.width/2)
-    self.onchangeValue = Event()
+    self.onChangeValue = Event()
   
   def evalValue(self):
     medval = (self.prvalue-self.x-5)/(self.width-10)
@@ -547,7 +547,7 @@ class Slider(UIElement):
       self.evalValue()
       self.valtxcolor.gset()
       draw_text(self.prvalue-8, self.y+self.height+4, str(self.value))
-      self.onchangeValue.InvokeListeners(self.value)
+      self.onChangeValue.InvokeListeners(self.value)
     self.mintxcolor.gset()
     draw_text(self.x+2,self.y+(self.height/3)-8,str(self.rangemin))
     self.maxtxcolor.gset()
