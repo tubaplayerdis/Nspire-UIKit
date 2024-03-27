@@ -12,11 +12,13 @@ This will constantly be updated
 
 Develop feature and test -> Repo code update -> Documentation Update -> Update Betas and Dev versions on Drive
 
-Currently updating documentation 
+Just Finished Cycle
 
 # Features Completed
 
 Color System
+
+Event System -  still needs impl on Button and TButton
 
 Label
 
@@ -34,13 +36,9 @@ Textbox Number Mode
 
 Color Picker
 
-Slider - not documented
+Slider
 
 # Current Planned Features before release:
-
-Event System
-
-Events for Slider
 
 Basic Graphing - Not Started
 
