@@ -10,7 +10,9 @@ This will constantly be updated
 
 # Update Process
 
-Repo code update -> Documentation Update -> Update Betas and Dev versions on Drive
+Develop feature and test -> Repo code update -> Documentation Update -> Update Betas and Dev versions on Drive
+
+Currently updating documentation 
 
 # Features Completed
 
