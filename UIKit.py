@@ -521,6 +521,8 @@ class Slider(UIElement):
   
   def render(self):
     if self.isClick():
+      if self.ischange:
+        self.onSelectValue.InvokeListeners(self.value)
       self.ischange = not self.ischange
     
     if self.ischange:
