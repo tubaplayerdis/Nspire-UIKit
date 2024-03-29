@@ -203,13 +203,13 @@ class Label(UIElement):
     set_color(0,0,0)
 
 class Button(UIElement):
-  def __init__(self, x, y, width, height, text, onClickFunc, arg):
+  def __init__(self, x, y, width, height, text, onClick, arg):
     self.x = x
     self.y = y
     self.width = width
     self.height = height
     self.text = text
-    self.onClickFunc = onClickFunc
+    self.onClick = onClick
     self.arg = arg
     self.callback = "You are trying to access the callback before it has been set; why?"
     self.bdcolor = Color(0,0,0)
@@ -234,9 +234,9 @@ class Button(UIElement):
     if self.isClick() == True:
       if self.onClick != None:
         if self.arg != None:
-          self.callback = self.onClickFunc(self.arg)
+          self.callback = self.onClick(self.arg)
         else:
-          self.callback = self.onClickFunc()
+          self.callback = self.onClick()
       #self.ccolor.gset()
       #fill_rect(self.x,self.y,self.width,self.height)
     self.bgcolor.gset()
