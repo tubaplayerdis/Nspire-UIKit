@@ -509,6 +509,7 @@ class Slider(UIElement):
     self.valtxcolor = Color(0,0,0)
     self.prvalue = self.x+(self.width/2)
     self.onChangeValue = Event()
+    self.onSelectValue = Event()
   
   def evalValue(self):
     medval = (self.prvalue-self.x-5)/(self.width-10)
@@ -521,7 +522,7 @@ class Slider(UIElement):
   
   def render(self):
     if self.isClick():
-      if self.ischange:
+      if not self.ischange:
         self.onSelectValue.InvokeListeners(self.value)
       self.ischange = not self.ischange
     
