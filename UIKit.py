@@ -1,29 +1,30 @@
 from ti_system import *
 from ti_draw import *
 from time import *
-from random import *
+import random as Random
 
 canvas=[]
 defaultpen = set_pen("thin","solid")
+
 
 def init():
   set_window(0,317,0,210)
   set_pen("thin","solid")
 
-def getStringWidth(text):
+def getStringWidth(text: str)->int:
   len=0
   for i in text:
     len+=8
   return len
 
-def getStringHeight(text):
+def getStringHeight(text: str)->int:
   return 8
   
 def draw_arrow(x1,y1,x2,y2,vx,vy):
   draw_line(x1,y1,vx,vy)
   draw_line(x2,y2,vx,vy)
   
-def isNumber(key):
+def isNumber(key: str)->bool:
   if key == "0":
     return True
   elif key == "1":
@@ -45,7 +46,52 @@ def isNumber(key):
   elif key == "9":
     return True
 
-def getColor(color):
+class Listener():
+  def __init__(self, funcref: function):
+    self.funcref = funcref
+  def call(self, args):
+    self.funcref(args)
+
+class Event():
+  def __init__(self):
+    self.listeners = []
+  
+  def addListener(self, listener: Listener):
+    self.listeners.append(listener)
+  
+  def removeListener(self, index: int):
+    self.listeners.pop(index)
+    
+  def removeAll(self):
+    self.listeners = []
+    
+  def InvokeListeners(self, ref):
+    for listen in self.listeners:
+      listen.call(ref)
+
+class Color:
+  def __init__(self, R: int, G: int, B: int):
+    self.R = R
+    self.G = G
+    self.B = B
+  
+  def set(self, color: str):
+    nc = getColor(color)
+    self.R = nc.R
+    self.G = nc.G
+    self.B = nc.B
+  def mset(self, R: int, G: int, B: int):
+    self.R = R
+    self.G = G
+    self.B = B
+    
+  def gset(self):
+    set_color(self.R,self.G,self.B)
+  
+  def get(self)->tuple:
+    return self.R,self.G,self.B
+  
+def getColor(color: str)->Color:
   if color == "red":
     return Color(178,31,53)
   elif color == "redorange":
@@ -97,92 +143,40 @@ def getColor(color):
   elif color == "darkgray":
     return Color(105,105,105)
 
-class Listener():
-  def __init__(self, funcref, isargs):
-    self.funcref = funcref
-    self.isargs = isargs
-  def call(self, args):
-    if self.isargs == True:
-      self.funcref(args)
-    else:
-      self.funcref()
-
-class Event():
-  def __init__(self):
-    self.listeners = []
-  
-  def addListener(self, listener):
-    self.listeners.append(listener)
-  
-  def removeListener(self, index):
-    self.listeners.pop(index)
-    
-  def removeAll(self):
-    self.listeners = []
-    
-  def InvokeListeners(self, args):
-    for listen in self.listeners:
-      listen.call(args)
-
-class Color:
-  def __init__(self, R, G, B):
-    self.R = R
-    self.G = G
-    self.B = B
-  
-  def set(self, color):
-    nc = getColor(color)
-    self.R = nc.R
-    self.G = nc.G
-    self.B = nc.B
-  def mset(self, R, G, B):
-    self.R = R
-    self.G = G
-    self.B = B
-    
-  def gset(self):
-    set_color(self.R,self.G,self.B)
-  
-  def get(self):
-    return self.R,self.G,self.B
-
 class UIElement:
   x=0
   y=0
-  width=10
-  height=10
+  width=100
+  height=20
   input=False
   cursorEvent = Event()
   clickEvent = Event()
-  def isCursor(self):
+  def isCursor(self)->bool:
     pos=get_mouse()
     xc = pos[0]+3
     yc = 210-pos[1]
-    if get_key() == "8":
-      print(xc)
-      print(self.x+self.width)
     if xc < (self.x+self.width) and xc > self.x and yc > self.y and yc < (self.y+self.height):
       return True
     else:
       if xc < (self.x+self.width) and xc > self.x and yc > self.y and yc < (self.y+self.height):
-        self.cursorEvent.InvokeListeners(None)
+        self.cursorEvent.InvokeListeners(self)
         return True
       else:
         if xc < (self.x+self.width) and xc > self.x and yc > self.y and yc < (self.y+self.height):
-          self.cursorEvent.InvokeListeners(None)
+          self.cursorEvent.InvokeListeners(self)
           return True
         else:
           return False
       
-  def isClick(self):
+  def isClick(self)->bool:
     if get_key() == "enter":
       if self.isCursor() == True:
-        self.clickEvent.InvokeListeners(None)
+        self.clickEvent.InvokeListeners(self)
         return True
     return False
 
 class Label(UIElement):
-  def __init__(self, x, y, text):
+  def __init__(self, x: int, y: int, text:str):
     self.text = text
     self.x=x
     self.y=y
@@ -190,7 +184,7 @@ class Label(UIElement):
     self.height = 20
     self.width = getStringWidth(text)
     self.color = Color(0,0,0)
-  def setText(self, nt):
+  def setText(self, nt: str):
     self.text = nt
     self.width = getStringWidth(self.text)
     
@@ -203,7 +197,7 @@ class Label(UIElement):
     set_color(0,0,0)
 
 class Button(UIElement):
-  def __init__(self, x, y, width, height, text, onClick, arg):
+  def __init__(self, x: int, y: int, width: int, height: int, text: str, onClick: function, arg: any):
     self.x = x
     self.y = y
     self.width = width
@@ -215,18 +209,19 @@ class Button(UIElement):
     self.bdcolor = Color(0,0,0)
     self.txcolor = Color(0,0,0)
     self.bgcolor = Color(140,140,140)
+    self.onClickEvent = Event()
 
-  def setText(self, text):
+  def setText(self, text: str):
     self.text = text
 
-  def getText(self):
+  def getText(self)->str:
     return self.text
 
-  def getSize(self):
+  def getSize(self)->tuple:
     size = self.width, self.height
     return size
 
-  def setSize(self, width, height):
+  def setSize(self, width: int, height: int):
     self.width = width
     self.height = height
 
@@ -237,6 +232,7 @@ class Button(UIElement):
           self.callback = self.onClick(self.arg)
         else:
           self.callback = self.onClick()
+        self.onClickEvent.InvokeListeners(self)
       #self.ccolor.gset()
       #fill_rect(self.x,self.y,self.width,self.height)
     self.bgcolor.gset()
@@ -244,11 +240,11 @@ class Button(UIElement):
     self.bdcolor.gset()
     draw_rect(self.x,self.y,self.width,self.height)
     self.txcolor.gset()
-    draw_text(self.x+3,self.y+self.height/10,self.text)
+    draw_text(self.x+3,self.y+(self.height/10),self.text)
     set_color(0,0,0)
 
 class Textbox(UIElement):
-  def __init__(self, x, y, width, height, text, isreadonly, DCL):
+  def __init__(self, x: int, y: int, width: int, height: int, text: str, isreadonly: bool, DCL: bool):
     self.x = x
     self.y = y
     self.width = width
@@ -264,10 +260,10 @@ class Textbox(UIElement):
     self.CL = -1
     self.edit = False
 
-  def setNumMode(self, toggle):
+  def setNumMode(self, toggle: bool):
     self.numMode = toggle
 
-  def setText(self, text):
+  def setText(self, text: str):
     if self.DCL == True:
       while True:
         if getStringWidth(text) > self.width:
@@ -285,14 +281,14 @@ class Textbox(UIElement):
     else:
       self.text = text
 
-  def getText(self):
+  def getText(self)->str:
     return self.text
 
-  def getSize(self):
+  def getSize(self)->tuple:
     size = self.width, self.height
     return size
 
-  def setSize(self, width, height):
+  def setSize(self, width: int, height: int):
     self.width = width
     self.height = height
 
@@ -334,13 +330,13 @@ class Textbox(UIElement):
     
 
 class Dropdown(UIElement):
-  def __init__(self, x, y, width, height, text, collapsable):
+  def __init__(self, x: int, y: int, width: int, height: int, text:str, iscollapsable: bool):
     self.x=x
     self.y=y
     self.width = width
     self.height = height
     self.text = text
-    self.collapsable = collapsable
+    self.collapsable = iscollapsable
     self.items = []
     self.collapsed = True
     self.buffer = 5
@@ -348,10 +344,10 @@ class Dropdown(UIElement):
     self.bdcolor = Color(0,0,0)
     self.bgcolor = Color(160,160,160)
     self.btcolor = Color(0,0,0)
-  def addElement(self,element):
+  def addElement(self,element: UIElement):
     self.items.append(element)
   
-  def removeElement(self,index):
+  def removeElement(self,index: int):
     self.items.pop(index)
   
   def removeAll(self):
@@ -393,7 +389,7 @@ class Dropdown(UIElement):
       set_color(0,0,0)
       
 class TButton(UIElement):
-  def __init__(self, x, y, width, height, text, onClick, arg):
+  def __init__(self, x: int, y: int, width: int, height: int, text: str, onClick: function, arg: any):
     self.x=x
     self.y=y
     self.width = width
@@ -409,18 +405,19 @@ class TButton(UIElement):
     self.onClick = onClick
     self.arg = arg
     self.callback = "You are trying to access the callback before it has been set; why?"
+    self.onClickEvent = Event()
 
-  def setText(self, text):
+  def setText(self, text: str):
     self.text = text
 
-  def getText(self):
+  def getText(self)->str:
     return self.text
 
-  def getSize(self):
+  def getSize(self)->tuple:
     size = self.width, self.height
     return size
 
-  def setSize(self, width, height):
+  def setSize(self, width: int, height: int):
     self.width = width
     self.height = height
 
@@ -431,6 +428,7 @@ class TButton(UIElement):
           self.callback = self.onClick(self.arg)
         else:
           self.callback = self.onClick()
+        self.onClickEvent.InvokeListeners(self)
       self.toggle = not self.toggle
     
     self.bgcolor.gset()
@@ -449,7 +447,7 @@ class TButton(UIElement):
     set_color(0,0,0)  
 
 class Panel(UIElement):
-  def __init__(self,x,y,width,height,isRender):
+  def __init__(self,x: int,y: int,width: int,height: int,isRender: bool):
     self.x = x
     self.y = y
     self.width = width
@@ -460,12 +458,12 @@ class Panel(UIElement):
     self.hasBorder = False
     self.isRender = isRender
   
-  def addElement(self,element):
+  def addElement(self,element: UIElement):
     element.x = self.x+element.x
     element.y = self.y+element.y
     self.items.append(element)
   
-  def removeElement(self,index):
+  def removeElement(self,index: int):
     self.items.pop(index)
   
   def removeAll(self):
@@ -474,7 +472,7 @@ class Panel(UIElement):
   def toggleRender(self):
     self.isRender = not self.isRender
   
-  def setRender(self, state):
+  def setRender(self, state: bool):
     self.isRender = state
     
   def render(self):
@@ -488,7 +486,7 @@ class Panel(UIElement):
         item.render()
 
 class Slider(UIElement):
-  def __init__(self,x,y,width,height,min,max,value,isInt):
+  def __init__(self,x: int,y: int,width: int,height: int,min: float,max: float,value: float,isInt: bool):
     self.x = x
     self.y = y
     self.width = width
@@ -523,7 +521,7 @@ class Slider(UIElement):
   def render(self):
     if self.isClick():
       if not self.ischange:
-        self.onSelectValue.InvokeListeners(self.value)
+        self.onSelectValue.InvokeListeners(self)
       self.ischange = not self.ischange
     
     if self.ischange:
@@ -550,14 +548,14 @@ class Slider(UIElement):
       self.evalValue()
       self.valtxcolor.gset()
       draw_text(self.prvalue-8, self.y+self.height+4, str(self.value))
-      self.onChangeValue.InvokeListeners(self.value)
+      self.onChangeValue.InvokeListeners(self)
     self.mintxcolor.gset()
     draw_text(self.x+2,self.y+(self.height/3)-8,str(self.rangemin))
     self.maxtxcolor.gset()
     draw_text(self.x+self.width-getStringWidth(str(self.rangemax)),self.y+(self.height/3)-8,str(self.rangemax))
 
 class Colorpicker(UIElement):
-  def __init__(self,x,y,color):
+  def __init__(self,x: int,y: int,color: Color):
     self.x = x
     self.y = y
     self.width = 120
@@ -597,18 +595,19 @@ class Colorpicker(UIElement):
       item.x = self.x + item.x
       item.y = self.y + item.y
   def rancol(self):
-    self.rbox.setText(str(randint(0,255)))
-    self.gbox.setText(str(randint(0,255)))
-    self.bbox.setText(str(randint(0,255)))
-    self.onrandom.InvokeListeners(None)
+    Random.seed(get_time_ms())
+    self.rbox.setText(str(Random.randint(0,255)))
+    self.gbox.setText(str(Random.randint(0,255)))
+    self.bbox.setText(str(Random.randint(0,255)))
+    self.onrandom.InvokeListeners(self)
   
   def open(self):
     self.isopen = True
-    self.onopen.InvokeListeners(None)
+    self.onopen.InvokeListeners(self)
 
   def selcol(self):
     self.isopen = False
-    self.onselect.InvokeListeners(None)
+    self.onselect.InvokeListeners(self)
 
   def upcol(self):
     r=0
@@ -628,7 +627,7 @@ class Colorpicker(UIElement):
       b=255
     self.crcolor.mset(r,g,b)
   
-  def getColor(self):
+  def getColor(self)->Color:
     return self.crcolor
   
   def render(self):
@@ -640,4 +639,130 @@ class Colorpicker(UIElement):
       fill_rect(self.x+5,self.y+30,45,70)
       for item in self.items:
         item.render()
+
+class Document:
+  lines = []
+  def __init__(self, width: int, height: int, text: str):
+    self.width = width
+    self.height = height
+    self.algo0time = -1
+    self.algo1time = -1
+    og=text
+    line = text
+    i = 0
+    b=0
+    first = get_time_ms()
+    while True:
+      for char in text:
+        line = line+char
+        i=i+1
+        if getStringWidth(line) >= width-1:
+          #print(line)
+          self.lines.append(line)
+          line = ""
+          text = text[i:]
+          if i == len(text):
+            #print("Making new line")
+            break
+          else:
+            i=0
+        #print("B is: "+str(b))
+        b=b+1 
+          
+      if b>=len(og)-1: 
+        self.lines.pop(0)
+        self.lines[0]=og[0]+self.lines[0]
+        self.algo0time = (get_time_ms()-first)/1000
+        break
+  def calclines(self, text: str):
+    max_width = self.width
+    first = get_time_ms()
+    lines = []
+    current_line = []
+    remaining_width = max_width
+
+    for word in text.split():
+        word_length = len(word)
+        if word_length >= remaining_width:
+            lines.append(''.join(current_line))
+            current_line = [word[:remaining_width]]
+            lines.append(''.join(current_line))
+            remaining_width = max_width - (word_length - remaining_width)
+        else:
+            if current_line:
+                current_line.append(' ')
+                remaining_width -= 1
+            current_line.extend(word)
+            remaining_width -= word_length
+
+        if remaining_width == 0:
+            lines.append(''.join(current_line))
+            current_line = []
+            remaining_width = max_width
+
+    if current_line:
+        lines.append(''.join(current_line))
+
+    self.algo1time = (get_time_ms()-first)/1000
+    return lines
+      
+
+
+class Textarea(UIElement):
+  def __init__(self, x: int, y: int, width: int, height: int):
+    self.x = x
+    self.y = y
+    self.width = width
+    self.height = height
+    self.readonly = False
+    self.exitkey = "up"
+    self.edit = False
+    self.text = "this is a testing string to see if this works"
+    self.bdcolor = Color(0,0,0)
+    self.txcolor = Color(0,0,0)
+    self.bgcolor = Color(230,230,230)
+    self.onTextChange = Event()
+    self.onEdit = Event()
+    self.onExit = Event()
+    self.document = Document(width, height, self.text)
+    self.firstLoop = True
+  def calcarea(self, args):
+    self.document.lines = self.document.calclines(self.text)
+
+  def setText(self, newtext: str):
+    self.text = newtext
+
+  def addText(self, addtext: str):
+    self.text += addtext
+
+  def render(self):
+    #Input
+    if(self.isClick()):
+      self.edit = not self.edit
+
+    if self.edit:
+      self.bgcolor.mset(215,215,215)
+      key = get_key(1)
+      if key == self.exitkey:
+        self.edit = False
+      elif key == "del":
+        self.text = self.text[:len(self.text)-1]
+      elif key == "enter":
+        self.text = self.text+"new"
+      else:
+        self.text = self.text + key
+      self.calcarea(self.text)
+      self.onTextChange.InvokeListeners(self)
+    else:
+      self.bgcolor.mset(230,230,230)
+    #Render
+    self.bgcolor.gset()
+    fill_rect(self.x, self.y, self.width, self.height)
+    self.bdcolor.gset()
+    draw_rect(self.x, self.y, self.width, self.height)
+    self.txcolor.gset()
+    add = 5
+    for lin in self.document.lines:
+      draw_text(self.x+2,self.y+add, lin)
+      add = add+10
 
