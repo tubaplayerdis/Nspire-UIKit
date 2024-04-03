@@ -1,6 +1,7 @@
 # Nspire-UIKit
 GUI framework written in python for TINspire calculators
-Somewhat fleshed out, READ Documentation
+
+READ Documentation for usage and check examples
 
 Full release coming soon, check beta releases via documentation downloads page
 
