@@ -15,6 +15,8 @@ Develop feature and test -> Repo code update -> Documentation Update -> Update B
 
 Updating Documentation for TextArea and Button/TButton events.
 
+After Updating Documnetation There Will be another Beta Release
+
 # Features Completed
 
 Color System
