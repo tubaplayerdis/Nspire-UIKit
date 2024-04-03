@@ -45,6 +45,62 @@ def isNumber(key: str)->bool:
     return True
   elif key == "9":
     return True
+  
+def WrapText(text: str, max_width: int):
+  lines = []
+  current_line = ''
+  current_width = 0
+
+  for char in text:
+      if char == ' ':
+          if current_width < max_width:
+              if current_line:
+                  current_line += ' '
+              current_width += 1
+          else:
+              lines.append(current_line)
+              current_line = ''
+              current_width = 0
+      else:
+          current_line += char
+          current_width += 1
+          if current_width >= max_width:
+              lines.append(current_line)
+              current_line = ''
+              current_width = 0
+
+  if current_line:
+      lines.append(current_line)
+
+  return lines
+
+def WrapText_D(text: str, width: int):
+  lines = []
+  og=text
+  line = text
+  i = 0
+  b=0
+  while True:
+    for char in text:
+      line = line+char
+      i=i+1
+      if getStringWidth(line) >= width-1:
+        #print(line)
+        lines.append(line)
+        line = ""
+        text = text[i:]
+        if i == len(text):
+          #print("Making new line")
+          break
+        else:
+          i=0
+      #print("B is: "+str(b))
+      b=b+1 
+        
+    if b>=len(og)-1: 
+      lines.pop(0)
+      lines[0]=og[0]+lines[0]
+      return lines
 
 class Listener():
   def __init__(self, funcref: function):
@@ -645,66 +701,20 @@ class Document:
   def __init__(self, width: int, height: int, text: str):
     self.width = width
     self.height = height
+    self.algotype = 0
     self.algo0time = -1
     self.algo1time = -1
-    og=text
-    line = text
-    i = 0
-    b=0
     first = get_time_ms()
-    while True:
-      for char in text:
-        line = line+char
-        i=i+1
-        if getStringWidth(line) >= width-1:
-          #print(line)
-          self.lines.append(line)
-          line = ""
-          text = text[i:]
-          if i == len(text):
-            #print("Making new line")
-            break
-          else:
-            i=0
-        #print("B is: "+str(b))
-        b=b+1 
-          
-      if b>=len(og)-1: 
-        self.lines.pop(0)
-        self.lines[0]=og[0]+self.lines[0]
-        self.algo0time = (get_time_ms()-first)/1000
-        break
+    self.lines = WrapText(text, self.width/8)
+    self.algo0time = (get_time_ms()-first)/1000   
   def calclines(self, text: str):
-    max_width = self.width
-    first = get_time_ms()
-    lines = []
-    current_line = []
-    remaining_width = max_width
-
-    for word in text.split():
-        word_length = len(word)
-        if word_length >= remaining_width:
-            lines.append(''.join(current_line))
-            current_line = [word[:remaining_width]]
-            lines.append(''.join(current_line))
-            remaining_width = max_width - (word_length - remaining_width)
-        else:
-            if current_line:
-                current_line.append(' ')
-                remaining_width -= 1
-            current_line.extend(word)
-            remaining_width -= word_length
-
-        if remaining_width == 0:
-            lines.append(''.join(current_line))
-            current_line = []
-            remaining_width = max_width
-
-    if current_line:
-        lines.append(''.join(current_line))
-
-    self.algo1time = (get_time_ms()-first)/1000
-    return lines
+    if self.algotype == 1:
+      first = get_time_ms()
+      self.lines = WrapText_D(text, self.width/8)
+    else:
+      first = get_time_ms()
+      self.lines = WrapText(text, self.width/8)
+      self.algo1time = (get_time_ms()-first)/1000
       
 
 
@@ -717,7 +727,7 @@ class Textarea(UIElement):
     self.readonly = False
     self.exitkey = "up"
     self.edit = False
-    self.text = "this is a testing string to see if this works"
+    self.text = " "
     self.bdcolor = Color(0,0,0)
     self.txcolor = Color(0,0,0)
     self.bgcolor = Color(230,230,230)
@@ -727,7 +737,7 @@ class Textarea(UIElement):
     self.document = Document(width, height, self.text)
     self.firstLoop = True
   def calcarea(self, args):
-    self.document.lines = self.document.calclines(self.text)
+    self.document.calclines(args)
 
   def setText(self, newtext: str):
     self.text = newtext
@@ -739,19 +749,23 @@ class Textarea(UIElement):
     #Input
     if(self.isClick()):
       self.edit = not self.edit
+      if not self.edit:
+        self.calcarea(self.text)
 
     if self.edit:
       self.bgcolor.mset(215,215,215)
       key = get_key(1)
+      newtext = ""
       if key == self.exitkey:
         self.edit = False
       elif key == "del":
-        self.text = self.text[:len(self.text)-1]
+        newtext = self.text[:len(self.text)-1]
       elif key == "enter":
-        self.text = self.text+"new"
+        newtext = self.text+"new"
       else:
-        self.text = self.text + key
-      self.calcarea(self.text)
+        newtext = self.text + key
+      self.document.calclines(newtext)
+      self.text = newtext
       self.onTextChange.InvokeListeners(self)
     else:
       self.bgcolor.mset(230,230,230)
@@ -763,6 +777,8 @@ class Textarea(UIElement):
     self.txcolor.gset()
     add = 5
     for lin in self.document.lines:
-      draw_text(self.x+2,self.y+add, lin)
+      draw_text(self.x+2,(self.y+self.height-10)-add, lin)
       add = add+10
+
+
 
