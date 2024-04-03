@@ -12,13 +12,13 @@ This will constantly be updated
 
 Develop feature and test -> Repo code update -> Documentation Update -> Update Betas and Dev versions on Drive
 
-Just Finished Cycle
+Updating Documentation for TextArea and Button/TButton events.
 
 # Features Completed
 
 Color System
 
-Event System -  still needs impl on Button and TButton
+Event System
 
 Label
 
@@ -38,16 +38,18 @@ Color Picker
 
 Slider
 
+TextArea
+
 # Current Planned Features before release:
 
-Basic Graphing - Not Started
+Graphing Box - Starting Soon
 
 Math Box/Chem Box - Not started
 
 # Thinking about
 
-Sliders for Colorpicker
+Getting Ready for Version 1.0
 
-Colorpicker as a function that return a color
+Bug testing
 
 
