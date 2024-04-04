@@ -55,4 +55,10 @@ Getting Ready for Version 1.0
 
 Bug testing
 
+# Known Bugs
+
+textarea wrap algo 0 has incorrect sizing
+
+textbox enabled edit when no cursor confirmation(input is being taken when it shouldnt)
+
 
