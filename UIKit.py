@@ -349,7 +349,7 @@ class Textbox(UIElement):
     self.height = height
 
   def render(self):
-    if get_key() == "enter":
+    if self.isClick() == True:
       self.edit = True
     if self.readonly == False and self.isCursor() and self.edit == True:
       self.edcolor.gset()
@@ -725,7 +725,10 @@ class Textarea(UIElement):
     self.width = width
     self.height = height
     self.readonly = False
-    self.exitkey = "up"
+    if get_platform() == "hh":
+      self.exitkey = "esc"
+    else:
+      self.exitkey = "up"
     self.edit = False
     self.text = " "
     self.bdcolor = Color(0,0,0)
@@ -757,6 +760,7 @@ class Textarea(UIElement):
       key = get_key(1)
       newtext = ""
       if key == self.exitkey:
+        newtext = self.text
         self.edit = False
       elif key == "del":
         newtext = self.text[:len(self.text)-1]
@@ -779,6 +783,5 @@ class Textarea(UIElement):
     for lin in self.document.lines:
       draw_text(self.x+2,(self.y+self.height-10)-add, lin)
       add = add+10
-
 
 
