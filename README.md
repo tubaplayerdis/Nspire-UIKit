@@ -13,7 +13,7 @@ This will constantly be updated
 
 Develop feature and test -> Repo code update -> Documentation Update -> Update Betas and Dev versions on Drive
 
-Updating Documentation for TextArea and Button/TButton events.
+Updating Documentation for TextArea and Button/TButton events, also adding pictures of what certian UIElemnents look like.
 
 After Updating Documnetation There Will be another Beta Release
 
