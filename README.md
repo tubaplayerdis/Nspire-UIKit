@@ -6,7 +6,8 @@ READ Documentation for usage and check examples
 Full release coming soon, check beta releases via documentation downloads page
 
 Documentation:
-https://sites.google.com/view/uikit-documentation/home
+https://aaronwilk.dev/pages/docs/uikit.html
+alt link - https://sites.google.com/view/uikit-documentation/home
 This will constantly be updated
 
 # Update Process
