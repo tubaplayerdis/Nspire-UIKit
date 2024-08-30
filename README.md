@@ -7,7 +7,9 @@ Full release coming soon, check beta releases via documentation downloads page
 
 Documentation:
 https://aaronwilk.dev/pages/docs/uikit.html
+
 alt link - https://sites.google.com/view/uikit-documentation/home
+
 This will constantly be updated
 
 # Update Process
