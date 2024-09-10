@@ -54,7 +54,7 @@ Math Box/Chem Box - Not started
 
 # Thinking about
 
-Getting Ready for Version 1.0
+Creating mock ti_draw and ti_system libs to allow for desktop uikit developement with tinspire emulator
 
 Bug testing
 
