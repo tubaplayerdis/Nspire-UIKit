@@ -103,7 +103,7 @@ def WrapText_D(text: str, width: int):
       return lines
 
 class Listener():
-  def __init__(self, funcref: function):
+  def __init__(self, funcref):
     self.funcref = funcref
   def call(self, args):
     self.funcref(args)
@@ -200,13 +200,14 @@ def getColor(color: str)->Color:
     return Color(105,105,105)
 
 class UIElement:
-  x=0
-  y=0
-  width=100
-  height=20
-  input=False
-  cursorEvent = Event()
-  clickEvent = Event()
+  x: int=0
+  y: int=0
+  width: int=100
+  height: int=20
+  input: bool=False
+  cursorEvent: Event = Event()
+  clickEvent: Event = Event()
+  dorender = True
   def isCursor(self)->bool:
     pos=get_mouse()
     xc = pos[0]+3
@@ -253,7 +254,7 @@ class Label(UIElement):
     set_color(0,0,0)
 
 class Button(UIElement):
-  def __init__(self, x: int, y: int, width: int, height: int, text: str, onClick: function, arg: any):
+  def __init__(self, x: int, y: int, width: int, height: int, text: str, onClick, arg: any):
     self.x = x
     self.y = y
     self.width = width
@@ -282,6 +283,7 @@ class Button(UIElement):
     self.height = height
 
   def render(self):
+    if self.dorender is False: return
     if self.isClick() == True:
       if self.onClick != None:
         if self.arg != None:
@@ -349,6 +351,7 @@ class Textbox(UIElement):
     self.height = height
 
   def render(self):
+    if self.dorender is False: return
     if self.isClick() == True:
       self.edit = True
     if self.readonly == False and self.isCursor() and self.edit == True:
@@ -410,6 +413,7 @@ class Dropdown(UIElement):
     self.items.clear()
     
   def render(self):
+    if self.dorender is False: return
     if self.isClick():
       self.collapsed = not self.collapsed
     self.bgcolor.gset()
@@ -445,7 +449,7 @@ class Dropdown(UIElement):
       set_color(0,0,0)
       
 class TButton(UIElement):
-  def __init__(self, x: int, y: int, width: int, height: int, text: str, onClick: function, arg: any):
+  def __init__(self, x: int, y: int, width: int, height: int, text: str, onClick, arg: any):
     self.x=x
     self.y=y
     self.width = width
@@ -478,6 +482,7 @@ class TButton(UIElement):
     self.height = height
 
   def render(self):
+    if self.dorender is False: return
     if self.isClick():
       if self.onClick != None:
         if self.arg != None:
@@ -532,6 +537,7 @@ class Panel(UIElement):
     self.isRender = state
     
   def render(self):
+    if self.dorender is False: return
     if self.isRender == True:
       self.color.gset()
       fill_rect(self.x,self.y,self.width,self.height)
@@ -575,6 +581,7 @@ class Slider(UIElement):
     
   
   def render(self):
+    if self.dorender is False: return
     if self.isClick():
       if not self.ischange:
         self.onSelectValue.InvokeListeners(self)
@@ -687,6 +694,7 @@ class Colorpicker(UIElement):
     return self.crcolor
   
   def render(self):
+    if self.dorender is False: return
     if self.isopen == True:
       self.bgcolor.gset()
       fill_rect(self.x,self.y,self.width,self.height)
@@ -749,6 +757,7 @@ class Textarea(UIElement):
     self.text += addtext
 
   def render(self):
+    if self.dorender is False: return
     #Input
     if(self.isClick()):
       self.edit = not self.edit
@@ -783,5 +792,3 @@ class Textarea(UIElement):
     for lin in self.document.lines:
       draw_text(self.x+2,(self.y+self.height-10)-add, lin)
       add = add+10
-
-
