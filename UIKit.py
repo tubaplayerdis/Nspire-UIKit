@@ -6,7 +6,6 @@ import random as Random
 canvas=[]
 defaultpen = set_pen("thin","solid")
 
-
 def init():
   set_window(0,317,0,210)
   set_pen("thin","solid")
