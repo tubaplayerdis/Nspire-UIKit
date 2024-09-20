@@ -6,9 +6,13 @@ import random as Random
 canvas=[]
 defaultpen = set_pen("thin","solid")
 
+
 def init():
   set_window(0,317,0,210)
   set_pen("thin","solid")
+
+def UIKit_Init():
+  init()
 
 def getStringWidth(text: str)->int:
   len=0
@@ -289,7 +293,7 @@ class Button(UIElement):
           self.callback = self.onClick(self.arg)
         else:
           self.callback = self.onClick()
-        self.onClickEvent.InvokeListeners(self)
+      self.onClickEvent.InvokeListeners(self)
       #self.ccolor.gset()
       #fill_rect(self.x,self.y,self.width,self.height)
     self.bgcolor.gset()
@@ -488,7 +492,7 @@ class TButton(UIElement):
           self.callback = self.onClick(self.arg)
         else:
           self.callback = self.onClick()
-        self.onClickEvent.InvokeListeners(self)
+      self.onClickEvent.InvokeListeners(self)
       self.toggle = not self.toggle
     
     self.bgcolor.gset()
